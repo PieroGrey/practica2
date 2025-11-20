@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InventoryManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">practica2</a> &gt; <a href="index.source.html" class="el_package">pe.universidad.practica</a> &gt; <span class="el_source">InventoryManager.java</span></div><h1>InventoryManager.java</h1><pre class="source lang-java linenums">package pe.universidad.practica;
+
+import java.util.HashMap;
+import java.util.Map;
+
+<span class="fc" id="L6">public class InventoryManager {</span>
+
+<span class="fc" id="L8">    private final Map&lt;String, Integer&gt; inventory = new HashMap&lt;&gt;();</span>
+    private static final int MIN_Q = 1;
+    private static final int MAX_Q = 1000;
+
+    // ---- Métodos auxiliares NO probados (baja cobertura) ----
+
+    // Producto antiguo que no debe acumular inventario
+    private boolean isDeprecatedProduct(String item) {
+<span class="pc bpc" id="L16" title="2 of 4 branches missed.">        return item.equalsIgnoreCase(&quot;legacy&quot;) || item.equalsIgnoreCase(&quot;old-item&quot;);</span>
+    }
+
+    // Ajuste de cantidad no usado por las pruebas
+    private int adjustQuantity(int q) {
+<span class="pc bpc" id="L21" title="1 of 2 branches missed.">        if (q &gt; 500)</span>
+<span class="nc" id="L22">            return q - 50;</span>
+<span class="fc" id="L23">        return q;</span>
+    }
+
+    // -----------------------------------------------------------
+
+    public void addItem(String item, int quantity) {
+
+<span class="pc bpc" id="L30" title="1 of 4 branches missed.">        if (item == null || item.trim().isEmpty()) {</span>
+<span class="fc" id="L31">            throw new IllegalArgumentException(&quot;El nombre del producto no puede estar vacío&quot;);</span>
+        }
+
+        // rama NO tocada por pruebas
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        if (isDeprecatedProduct(item)) {</span>
+<span class="nc" id="L36">            return;</span>
+        }
+
+<span class="pc bpc" id="L39" title="1 of 4 branches missed.">        if (quantity &lt; MIN_Q || quantity &gt; MAX_Q) {</span>
+<span class="fc" id="L40">            throw new IllegalArgumentException(&quot;Cantidad inválida: &quot; + quantity);</span>
+        }
+
+        // rama NO tocada por pruebas (bajo cobertura)
+<span class="fc" id="L44">        quantity = adjustQuantity(quantity);</span>
+
+<span class="fc" id="L46">        inventory.merge(item.trim(), quantity, Integer::sum);</span>
+<span class="fc" id="L47">    }</span>
+
+    public int getQuantity(String item) {
+<span class="fc" id="L50">        return inventory.getOrDefault(item, 0);</span>
+    }
+
+    public boolean contains(String item) {
+<span class="fc" id="L54">        return inventory.containsKey(item);</span>
+    }
+
+    // extra NO probado
+    public Map&lt;String, Integer&gt; getRawInventoryInternal() {
+<span class="nc" id="L59">        return inventory;</span>
+    }
+
+    public Map&lt;String, Integer&gt; getInventory() {
+<span class="nc" id="L63">        return Map.copyOf(inventory);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
